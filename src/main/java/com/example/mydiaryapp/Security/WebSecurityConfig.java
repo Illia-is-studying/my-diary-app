@@ -54,11 +54,14 @@ public class WebSecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(form -> {
-                    form.loginPage("/login").permitAll();
+                    form.loginPage("/login")
+                            .defaultSuccessUrl("/", true)
+                            .permitAll();
+
                     form.defaultSuccessUrl("/diaries");
                 })
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/register", "/css/**", "/js/**").permitAll();
+                    registry.requestMatchers("/", "/login", "/register", "/css/**", "/js/**").permitAll();
                     registry.anyRequest().authenticated();
                 })
                 .build();
