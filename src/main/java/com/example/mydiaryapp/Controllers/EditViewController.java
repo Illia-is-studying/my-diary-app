@@ -10,6 +10,6 @@ public class EditViewController {
     @GetMapping("/edit-view")
     public String viewEdit(@RequestParam(value = "tab", defaultValue = "edit") String tab, Model model) {
         model.addAttribute("activeTab", tab);
-        return "main/edit-view";
+        return "user-diaries/edit-view";
     }
 }

@@ -7,7 +7,7 @@
     <title>View & Edit</title>
 </head>
 <body>
-<div th:replace="fragments/navbars/user-logged-nav"></div>
+<div th:replace="~{fragments/navbars/user-logged-nav}"></div>
 
 <main>
     <div class="container py-5 mt-5">
@@ -40,17 +40,17 @@
                                               placeholder="Write your notes here" style="height: 100px"></textarea>
                                 <div class="d-flex flex-column my-auto">
                                     <button class="btn btn-light mb-1">
-                                        <span th:replace="fragments/svg-icons/x-svg"></span>
+                                        <span th:replace="~{fragments/svg-icons/x-svg}"></span>
                                     </button>
                                     <button class="btn btn-light">
-                                        <span th:replace="fragments/svg-icons/copy-svg"></span>
+                                        <span th:replace="~{fragments/svg-icons/copy-svg}"></span>
                                     </button>
                                 </div>
                             </div>
 
                             <div class="input-group mb-5 d-flex ">
                                     <span class="input-group-text">
-                                        <span th:replace="fragments/svg-icons/image-file-svg"></span>
+                                        <span th:replace="~{fragments/svg-icons/image-file-svg}"></span>
                                     </span>
 
                                 <input class="form-control  form-control-lg rounded-end me-2" type="file"
@@ -58,14 +58,14 @@
 
                                 <div class="d-flex flex-column my-auto">
                                     <button class="btn btn-light mb-1">
-                                        <span th:replace="fragments/svg-icons/x-svg"></span>
+                                        <span th:replace="~{fragments/svg-icons/x-svg}"></span>
                                     </button>
                                 </div>
                             </div>
 
                             <div class="input-group mb-5 d-flex ">
                                     <span class="input-group-text">
-                                        <span th:replace="fragments/svg-icons/media-file-svg"></span>
+                                        <span th:replace="~{fragments/svg-icons/media-file-svg}"></span>
                                     </span>
 
                                 <input class="form-control  form-control-lg rounded-end me-2" type="file"
@@ -73,7 +73,7 @@
 
                                 <div class="d-flex flex-column my-auto">
                                     <button class="btn btn-light mb-1">
-                                        <span th:replace="fragments/svg-icons/x-svg"></span>
+                                        <span th:replace="~{fragments/svg-icons/x-svg}"></span>
                                     </button>
                                 </div>
                             </div>
@@ -81,26 +81,26 @@
                             <div class="mb-5 d-flex flex-wrap justify-content-between">
                                 <div style="width: 24%;" class="input-group input-group-sm mb-2">
                                         <span class="input-group-text">
-                                            <span th:replace="fragments/svg-icons/tag-svg"></span>
+                                            <span th:replace="~{fragments/svg-icons/tag-svg}"></span>
                                         </span>
                                     <input type="text" class="form-control" aria-label="Recipient's username"
                                            aria-describedby="button-addon2" value="Tag 1" disabled>
                                     <button class="btn btn-light" type="button" id="button-addon2">
-                                        <span th:replace="fragments/svg-icons/dash-svg"></span>
+                                        <span th:replace="~{fragments/svg-icons/dash-svg}"></span>
                                     </button>
                                 </div>
 
                                 <div class="input-group input-group-sm w-25 mb-2">
                                         <span class="input-group-text">
-                                            <span th:replace="fragments/svg-icons/tags-svg"></span>
+                                            <span th:replace="~{fragments/svg-icons/tags-svg}"></span>
                                         </span>
                                     <input type="text" list="datalistTags" class="form-control" placeholder="Tag"
                                            aria-label="Recipient's username" aria-describedby="button-addon2">
                                     <button class="btn btn-light" type="button" id="plus">
-                                        <span th:replace="fragments/svg-icons/plus-svg"></span>
+                                        <span th:replace="~{fragments/svg-icons/plus-svg}"></span>
                                     </button>
                                     <button class="btn btn-light" type="button" id="minus">
-                                        <span th:replace="fragments/svg-icons/dash-svg"></span>
+                                        <span th:replace="~{fragments/svg-icons/dash-svg}"></span>
                                     </button>
                                 </div>
                                 <datalist id="datalistTags">
@@ -118,15 +118,15 @@
                                 <div class="btn-group" role="group" aria-label="Basic example">
                                     <button type="button" class="btn btn-light">
                                         <span>Add Text</span>&nbsp;<span
-                                            th:replace="fragments/svg-icons/text-fill-svg"></span>
+                                            th:replace="~{fragments/svg-icons/text-fill-svg}"></span>
                                     </button>
                                     <button type="button" class="btn btn-light">
                                         <span>Add Image</span>&nbsp;<span
-                                            th:replace="fragments/svg-icons/image-fill-svg"></span>
+                                            th:replace="~{fragments/svg-icons/image-fill-svg}"></span>
                                     </button>
                                     <button type="button" class="btn btn-light">
                                         <span>Add Media</span>&nbsp;<span
-                                            th:replace="fragments/svg-icons/media-fill-svg"></span>
+                                            th:replace="~{fragments/svg-icons/media-fill-svg}"></span>
                                     </button>
                                 </div>
 
@@ -165,7 +165,7 @@
                                 <div class="mb-3">
                                     <div class="mb-1">
                                         <button class="btn btn-success">
-                                            <span th:replace="fragments/svg-icons/download-svg"></span>
+                                            <span th:replace="~{fragments/svg-icons/download-svg}"></span>
                                             <span>&ensp;Download</span>
                                         </button>
                                     </div>
@@ -182,32 +182,32 @@
                                 </div>
                                 <div class="mb-3 d-flex align-items-center">
                                     <button class="btn btn-success">
-                                        <span th:replace="fragments/svg-icons/download-svg"></span>
+                                        <span th:replace="~{fragments/svg-icons/download-svg}"></span>
                                         <span>&ensp;Download</span>
                                     </button>
                                     <div class="ms-2 text-success">
-                                        <span th:replace="fragments/svg-icons/media-file-svg"></span>
+                                        <span th:replace="~{fragments/svg-icons/media-file-svg}"></span>
                                         <span>Media File Name</span>
                                     </div>
                                 </div>
                                 <div class="mb-5 d-flex flex-wrap">
                                     <div style="width: 24%;" class="input-group input-group-sm mb-2 me-1">
                                             <span class="input-group-text">
-                                                <span th:replace="fragments/svg-icons/tag-svg"></span>
+                                                <span th:replace="~{fragments/svg-icons/tag-svg}"></span>
                                             </span>
                                         <input type="text" class="form-control" aria-label="Recipient's username"
                                                aria-describedby="button-addon2" value="Tag 1" disabled>
                                     </div>
                                     <div style="width: 24%;" class="input-group input-group-sm mb-2 me-1">
                                             <span class="input-group-text">
-                                               <span th:replace="fragments/svg-icons/tag-svg"></span>
+                                               <span th:replace="~{fragments/svg-icons/tag-svg}"></span>
                                             </span>
                                         <input type="text" class="form-control" aria-label="Recipient's username"
                                                aria-describedby="button-addon2" value="Tag 1" disabled>
                                     </div>
                                     <div style="width: 24%;" class="input-group input-group-sm mb-2 me-1">
                                             <span class="input-group-text">
-                                                <span th:replace="fragments/svg-icons/tag-svg"></span>
+                                                <span th:replace="~{fragments/svg-icons/tag-svg}"></span>
                                             </span>
                                         <input type="text" class="form-control" aria-label="Recipient's username"
                                                aria-describedby="button-addon2" value="Tag 1" disabled>
@@ -216,7 +216,7 @@
                                 <div class="d-flex">
                                     <div class="input-group input-group-sm me-2">
                                             <span class="input-group-text">
-                                                <span th:replace="fragments/svg-icons/plus-date-svg">
+                                                <span th:replace="~{fragments/svg-icons/plus-date-svg}">
                                                 </span><span>&ensp;Created Date</span>
                                             </span>
                                         <input type="text" class="form-control" aria-label="Recipient's username"
@@ -225,7 +225,7 @@
                                     </div>
                                     <div class="input-group input-group-sm">
                                             <span class="input-group-text">
-                                                <span th:replace="fragments/svg-icons/date-check-svg">
+                                                <span th:replace="~{fragments/svg-icons/date-check-svg}">
                                                 </span><span>&ensp;Last Edit</span>
                                             </span>
                                         <input type="text" class="form-control" aria-label="Recipient's username"

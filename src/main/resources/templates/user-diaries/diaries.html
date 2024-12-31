@@ -12,7 +12,7 @@
     </style>
 </head>
 <body>
-<div th:replace="fragments/navbars/user-logged-nav"></div>
+<div th:replace="~{fragments/navbars/user-logged-nav}"></div>
 
 <main>
     <div class="container py-5 mt-5">
@@ -31,13 +31,13 @@
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
                                     <a href="/view" class="btn btn-outline-info me-2 mb-2">
-                                        <div th:replace="fragments/svg-icons/circle-info-svg"></div>
+                                        <div th:replace="~{fragments/svg-icons/circle-info-svg}"></div>
                                     </a>
                                     <a href="/edit" class="btn btn-outline-warning me-2 mb-2">
-                                        <div th:replace="fragments/svg-icons/pencil-svg"></div>
+                                        <div th:replace="~{fragments/svg-icons/pencil-svg}"></div>
                                     </a>
                                     <a href="/delete" class="btn btn-outline-danger mb-2">
-                                        <div th:replace="fragments/svg-icons/trash-svg"></div>
+                                        <div th:replace="~{fragments/svg-icons/trash-svg}"></div>
                                     </a>
                                 </li>
                             </ul>
@@ -49,7 +49,7 @@
             <div class="col-4 ms-auto">
                 <div class="mb-3">
                     <a href="/new" class="btn btn-outline-primary">
-                        <span>Add New</span>&ensp;<div th:replace="fragments/svg-icons/plus-file-svg"></div>
+                        <span>Add New</span>&ensp;<div th:replace="~{fragments/svg-icons/plus-file-svg}"></div>
                     </a>
                 </div>
                 <form>
