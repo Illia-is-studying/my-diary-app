@@ -64,6 +64,13 @@ public class WebSecurityConfig {
                     registry.requestMatchers("/", "/login", "/register", "/css/**", "/js/**").permitAll();
                     registry.anyRequest().authenticated();
                 })
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .permitAll()
+                )
                 .build();
     }
 }

@@ -24,6 +24,6 @@ public class DiaryFragmentModel {
     @JoinColumn(name="fragment_id")
     private FragmentModel fragment;
 
-    @Column(nullable = false)
-    private Integer queuePosition;
+//    @Column(nullable = false)
+//    private Integer queuePosition;
 }

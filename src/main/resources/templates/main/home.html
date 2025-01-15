@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,13 @@
 </head>
 
 <body>
-<div th:replace="~{fragments/navbars/user-not-logged-nav}"></div>
+<div sec:authorize="isAnonymous()">
+    <div th:replace="~{fragments/navbars/user-not-logged-nav}"></div>
+</div>
+
+<div sec:authorize="isAuthenticated()">
+    <div th:replace="~{fragments/navbars/user-logged-nav}"></div>
+</div>
 
 <main>
     <div class="container text-center py-5 mt-5">

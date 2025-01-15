@@ -17,12 +17,12 @@
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="nav-item" role="presentation">
                         <a class="nav-link"
-                           th:href="@{edit-view(tab='edit')}"
+                           th:href="'?tab=edit'"
                            th:classappend="${activeTab == 'edit' ? 'active' : ''}">Edit</a>
                     </li>
                     <li class="nav-item" role="presentation">
                         <a class="nav-link"
-                           th:href="@{edit-view(tab='view')}"
+                           th:href="'?tab=view'"
                            th:classappend="${activeTab == 'view' ? 'active' : ''}">View</a>
                     </li>
                 </ul>
@@ -31,21 +31,25 @@
                     <!-- Edit Tab -->
                     <div class="tab-pane fade" id="tabedit" role="tabpanel"
                          th:classappend="${activeTab == 'edit' ? 'show active' : ''}">
-                        <form method="post" enctype="multipart/form-data">
+                        <form method="post" action="/edit-view/save" enctype="multipart/form-data">
                             <div class="mb-4 w-50 mx-auto">
+                                <input type="hidden" id="diaryId" name="diaryId"
+                                       th:value="${diaryId == null ? 0 : diaryId}">
                                 <input id="titleInput" name="titleInput" class="form-control fs-4" type="text"
-                                       placeholder="Diary title" th:value="${title}">
+                                       placeholder="Diary title" th:value="${title}" required>
                             </div>
 
-                            <div th:each="fragmentView: ${fragmentViews}">
-                                <div th:if="${fragmentView.getFragmentType().equals('text')}" class="mb-5 d-flex">
-                                        <textarea th:id="'content'+${fragmentViews.indexOf(fragmentView)}"
-                                                  th:name="'content'+${fragmentViews.indexOf(fragmentView)}"
+                            <div th:each="fragmentModel : ${fragmentModels}">
+                                <div th:if="${fragmentModel.getFragmentType() == FragmentType.TEXT_FRAGMENT}"
+                                     class="mb-5 d-flex">
+                                        <textarea th:id="'content'+${fragmentModel.getId()}"
+                                                  th:name="'content'+${fragmentModel.getId()}"
                                                   class="form-control p-3 me-2 fs-5" aria-label="Content"
-                                                  placeholder="Write your notes here" style="height: 100px"></textarea>
+                                                  placeholder="Write your notes here" style="height: 100px"
+                                                  th:text="${fragmentModel.getTextFragment()}"></textarea>
 
                                     <div class="d-flex flex-column my-auto">
-                                        <a th:href="'edit-view?removefragment='+${fragmentViews.indexOf(fragmentView)}"
+                                        <a th:href="${diaryId}+'?removefragmentid='+${fragmentModel.getId()}"
                                            class="btn btn-light mb-1">
                                             <span th:replace="~{fragments/svg-icons/x-svg}"></span>
                                         </a>
@@ -55,34 +59,38 @@
                                     </div>
                                 </div>
 
-                                <div th:if="${fragmentView.getFragmentType().equals('image')}"
+                                <div th:if="${fragmentModel.getFragmentType() == FragmentType.IMAGE}"
                                      class="input-group mb-5 d-flex ">
                                     <span class="input-group-text">
                                         <span th:replace="~{fragments/svg-icons/image-file-svg}"></span>
                                     </span>
 
-                                    <input class="form-control  form-control-lg rounded-end me-2" type="file"
+                                    <input th:id="'image'+${fragmentModel.getId()}"
+                                           th:name="'image'+${fragmentModel.getId()}"
+                                           class="form-control  form-control-lg rounded-end me-2" type="file"
                                            id="formFile">
 
                                     <div class="d-flex flex-column my-auto">
-                                        <a th:href="'edit-view?removefragment='+${fragmentViews.indexOf(fragmentView)}"
+                                        <a th:href="${diaryId}+'?removefragmentid='+${fragmentModel.getId()}"
                                            class="btn btn-light mb-1">
                                             <span th:replace="~{fragments/svg-icons/x-svg}"></span>
                                         </a>
                                     </div>
                                 </div>
 
-                                <div th:if="${fragmentView.getFragmentType().equals('media')}"
+                                <div th:if="${fragmentModel.getFragmentType() == FragmentType.MEDIA_FILE}"
                                      class="input-group mb-5 d-flex ">
                                     <span class="input-group-text">
                                         <span th:replace="~{fragments/svg-icons/media-file-svg}"></span>
                                     </span>
 
-                                    <input class="form-control  form-control-lg rounded-end me-2" type="file"
+                                    <input th:id="'image'+${fragmentModel.getId()}"
+                                           th:name="'image'+${fragmentModel.getId()}"
+                                           class="form-control  form-control-lg rounded-end me-2" type="file"
                                            id="mediaFile1">
 
                                     <div class="d-flex flex-column my-auto">
-                                        <a th:href="'edit-view?removefragment='+${fragmentViews.indexOf(fragmentView)}"
+                                        <a th:href="${diaryId}+'?removefragmentid='+${fragmentModel.getId()}"
                                            class="btn btn-light mb-1">
                                             <span th:replace="~{fragments/svg-icons/x-svg}"></span>
                                         </a>
@@ -90,29 +98,17 @@
                                 </div>
                             </div>
 
-                            <div class="mb-5 d-flex flex-wrap justify-content-between">
-                                <div style="width: 24%;" class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text">
-                                            <span th:replace="~{fragments/svg-icons/tag-svg}"></span>
-                                        </span>
-                                    <input type="text" class="form-control" aria-label="Recipient's username"
-                                           aria-describedby="button-addon2" value="Tag 1" disabled>
-                                    <button class="btn btn-light" type="button" id="button-addon2">
-                                        <span th:replace="~{fragments/svg-icons/dash-svg}"></span>
-                                    </button>
-                                </div>
-
+                            <div th:if="${diaryId != null && diaryId != 0}"
+                                 class="mb-5 d-flex flex-wrap justify-content-between">
                                 <div class="input-group input-group-sm w-25 mb-2">
-                                        <span class="input-group-text">
-                                            <span th:replace="~{fragments/svg-icons/tags-svg}"></span>
-                                        </span>
-                                    <input type="text" list="datalistTags" class="form-control" placeholder="Tag"
+                                    <span class="input-group-text">
+                                        <span th:replace="~{fragments/svg-icons/tags-svg}"></span>
+                                    </span>
+                                    <input type="text" id="newTag" list="datalistTags" class="form-control"
+                                           placeholder="Tag"
                                            aria-label="Recipient's username" aria-describedby="button-addon2">
-                                    <button class="btn btn-light" type="button" id="plus">
+                                    <button class="btn btn-light" type="button" id="addTagButton">
                                         <span th:replace="~{fragments/svg-icons/plus-svg}"></span>
-                                    </button>
-                                    <button class="btn btn-light" type="button" id="minus">
-                                        <span th:replace="~{fragments/svg-icons/dash-svg}"></span>
                                     </button>
                                 </div>
                                 <datalist id="datalistTags">
@@ -122,27 +118,74 @@
                                     <option value="Tag 4">
                                     <option value="Tag 5">
                                 </datalist>
+
+                                <div th:each="tagModel : ${tagModels}" style="width: 24%;"
+                                     class="input-group input-group-sm mb-2">
+                                        <span class="input-group-text">
+                                            <span th:replace="~{fragments/svg-icons/tag-svg}"></span>
+                                        </span>
+                                    <input type="text" class="form-control" aria-label="Recipient's username"
+                                           aria-describedby="button-addon2" th:value="${tagModel.getContent()}"
+                                           disabled>
+                                    <a th:href="${diaryId}+'?removetagid='+${tagModel.getId()}"
+                                       class="btn btn-light" type="button" id="button-addon2">
+                                        <span th:replace="~{fragments/svg-icons/dash-svg}"></span>
+                                    </a>
+                                </div>
                             </div>
 
                             <div class="d-flex">
-                                <button type="submit" class="btn btn-primary me-2" th:value="save">Save</button>
+                                <button name="buttonSubmit" type="submit" th:value="save" class="btn btn-primary me-2">
+                                    Save
+                                </button>
 
                                 <div class="btn-group" role="group" aria-label="Basic example">
-                                    <a href="edit-view?fragmenttype=text" class="btn btn-light">
+                                    <button name="buttonSubmit" type="submit" th:value="newtext" class="btn btn-light">
                                         <span>Add Text</span>&nbsp;<span
                                             th:replace="~{fragments/svg-icons/text-fill-svg}"></span>
-                                    </a>
-                                    <a href="edit-view?fragmenttype=image" type="button" class="btn btn-light">
+                                    </button>
+                                    <button name="buttonSubmit" type="submit" th:value="newimage" class="btn btn-light">
                                         <span>Add Image</span>&nbsp;<span
                                             th:replace="~{fragments/svg-icons/image-fill-svg}"></span>
-                                    </a>
-                                    <a href="edit-view?fragmenttype=media" type="button" class="btn btn-light">
+                                    </button>
+                                    <button name="buttonSubmit" type="submit" th:value="newmedia" class="btn btn-light">
                                         <span>Add Media</span>&nbsp;<span
                                             th:replace="~{fragments/svg-icons/media-fill-svg}"></span>
-                                    </a>
+                                    </button>
                                 </div>
 
-                                <button type="submit" class="btn btn-danger ms-2" th:value="delete">Delete</button>
+                                <button type="button" th:disabled="${diaryId == null || diaryId == 0}"
+                                        class="btn btn-danger ms-2" data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal">
+                                    Delete
+                                </button>
+                                <div class="modal fade" id="deleteModal" tabindex="-1"
+                                     aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <span>Are you sure you want to delete the diary titled</span>
+                                                <b th:text="${title}"></b><span>?</span>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    Cancel
+                                                </button>
+                                                <form method="post" action="/edit-view/save">
+                                                    <button name="buttonSubmit" type="submit" th:value="delete"
+                                                            class="btn btn-danger">Confirm
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <a href="/diaries" class="btn btn-secondary ms-auto">Go Back</a>
                             </div>
                         </form>
@@ -260,6 +303,16 @@
     </div>
 </main>
 
+<script type="application/javascript">
+    document.getElementById('addTagButton').addEventListener('click', function () {
+        const newTag = document.getElementById('newTag').value.trim();
+        const diaryId = document.getElementById('diaryId').value;
+
+        if (newTag) {
+            window.location.href = `/edit-view/${diaryId}?addtag=${encodeURIComponent(newTag)}`;
+        }
+    });
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>

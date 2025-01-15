@@ -1,12 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Sign Up</title>
     <link href="/css/bootstrap.lumen.min.css" rel="stylesheet">
 </head>
 <body>
-<div th:replace="~{fragments/navbars/user-not-logged-nav}"></div>
+<div sec:authorize="isAnonymous()">
+    <div th:replace="~{fragments/navbars/user-not-logged-nav}"></div>
+</div>
+
+<div sec:authorize="isAuthenticated()">
+    <div th:replace="~{fragments/navbars/user-logged-nav}"></div>
+</div>
 <main>
     <div class="container mt-5">
         <div class="row justify-content-center">

@@ -1,5 +1,6 @@
 package com.example.mydiaryapp.Models.ViewModels;
 
+import com.example.mydiaryapp.Enums.FragmentType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,9 +11,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FragmentViewModel {
-    private Long diaryFragmentId;
+    private Integer queuePosition;
 
-    private String fragmentType;
+    private Long fragmentId;
+
+    private FragmentType fragmentType;
 
     private String textFragment;
 

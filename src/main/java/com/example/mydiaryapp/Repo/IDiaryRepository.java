@@ -1,6 +1,7 @@
 package com.example.mydiaryapp.Repo;
 
 import com.example.mydiaryapp.Models.DiaryModel;
+import com.example.mydiaryapp.Models.MyAppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
@@ -20,4 +21,6 @@ public interface IDiaryRepository extends JpaRepository<DiaryModel, Long> {
     List<DiaryModel> findByLastEditDateAfter(LocalDateTime startDate);
 
     List<DiaryModel> findByLastEditDateBetween(LocalDateTime startDate, LocalDateTime endDate);
+
+    List<DiaryModel> findDiariesByMyAppUsersId(Long userId);
 }
