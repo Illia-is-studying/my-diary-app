@@ -1,38 +1,36 @@
 package com.example.mydiaryapp.Helpers;
 
 import com.example.mydiaryapp.Enums.FragmentType;
-import com.example.mydiaryapp.Models.DiaryModel;
-import com.example.mydiaryapp.Models.FragmentModel;
-import com.example.mydiaryapp.Models.MyAppUser;
-import com.example.mydiaryapp.Models.TagModel;
-import com.example.mydiaryapp.Services.DiaryService;
-import com.example.mydiaryapp.Services.FragmentService;
-import com.example.mydiaryapp.Services.MyAppUserService;
-import com.example.mydiaryapp.Services.TagService;
+import com.example.mydiaryapp.Models.*;
+import com.example.mydiaryapp.Models.ViewModels.FragmentViewModel;
+import com.example.mydiaryapp.Services.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class EditViewControllerHelper {
     public final DiaryService diaryService;
     public final FragmentService fragmentService;
     public final MyAppUserService myAppUserService;
     public final TagService tagService;
+    public final ImageFragmentService imageFragmentService;
+    public final MediaFileFragmentService mediaFileFragmentService;
 
     private final List<FragmentModel> fragmentModelsBuffer = new ArrayList<>();
 
     public EditViewControllerHelper(DiaryService diaryService, FragmentService fragmentService,
-                                    MyAppUserService myAppUserService, TagService tagService) {
+                                    MyAppUserService myAppUserService, TagService tagService,
+                                    ImageFragmentService imageFragmentService,
+                                    MediaFileFragmentService mediaFileFragmentService) {
         this.diaryService = diaryService;
         this.fragmentService = fragmentService;
         this.myAppUserService = myAppUserService;
         this.tagService = tagService;
+        this.imageFragmentService = imageFragmentService;
+        this.mediaFileFragmentService = mediaFileFragmentService;
     }
 
     public Optional<DiaryModel> createDiary(Authentication authentication, String title) {
@@ -73,19 +71,31 @@ public class EditViewControllerHelper {
                 if (key.startsWith("image") && !file.isEmpty()) {
                     FragmentModel fragmentModel = new FragmentModel();
 
+                    ImageFragment imageFragment = new ImageFragment();
+                    imageFragment.setFileName(file.getOriginalFilename());
+                    imageFragment.setFileType(file.getContentType());
+                    imageFragment.setImageData(file.getBytes());
+                    //imageFragmentService.saveImage(imageFragment);
+
                     Long id = Long.parseLong(key.replace("image", ""));
                     fragmentModel.setId(id);
                     fragmentModel.setFragmentType(FragmentType.IMAGE);
-                    fragmentModel.setImageFragment(file.getBytes());
+                    fragmentModel.setImageFragment(imageFragment);
 
                     fragmentModelsBuffer.add(fragmentModel);
                 } else if (key.startsWith("media") && !file.isEmpty()) {
                     FragmentModel fragmentModel = new FragmentModel();
 
-                    Long id = Long.parseLong(key.replace("image", ""));
+                    MediaFileFragment mediaFileFragment = new MediaFileFragment();
+                    mediaFileFragment.setFileName(file.getOriginalFilename());
+                    mediaFileFragment.setFileType(file.getContentType());
+                    mediaFileFragment.setMediaData(file.getBytes());
+                    //mediaFileFragmentService.saveMedia(mediaFileFragment);
+
+                    Long id = Long.parseLong(key.replace("media", ""));
                     fragmentModel.setId(id);
                     fragmentModel.setFragmentType(FragmentType.MEDIA_FILE);
-                    fragmentModel.setMediaFileFragment(file.getBytes());
+                    fragmentModel.setMediaFileFragment(mediaFileFragment);
 
                     fragmentModelsBuffer.add(fragmentModel);
                 }
@@ -136,6 +146,30 @@ public class EditViewControllerHelper {
         }
 
         return false;
+    }
+
+    public List<FragmentViewModel> getFragmentViewModels(Long diaryId) {
+        List<FragmentViewModel> fragmentViewModels = new ArrayList<>();
+        List<FragmentModel> fragmentModels = fragmentService.findAllByDiaryId(diaryId);
+
+        fragmentModels.forEach(fragmentModel -> {
+            String base64Data = null;
+            if (fragmentModel.getImageFragment() != null) {
+                base64Data = Base64.getEncoder().encodeToString(fragmentModel.getImageFragment().getImageData());
+            } else if (fragmentModel.getMediaFileFragment() != null) {
+                base64Data = Base64.getEncoder().encodeToString(fragmentModel.getMediaFileFragment().getMediaData());
+            }
+
+            fragmentViewModels.add(new FragmentViewModel(
+                    fragmentModel.getId(),
+                    fragmentModel.getFragmentType(),
+                    fragmentModel.getTextFragment(),
+                    base64Data,
+                    fragmentModel.getImageFragment(),
+                    fragmentModel.getMediaFileFragment()));
+        });
+
+        return fragmentViewModels;
     }
 
     public List<FragmentModel> getFragmentModels() {

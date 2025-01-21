@@ -1,6 +1,8 @@
 package com.example.mydiaryapp.Models.ViewModels;
 
 import com.example.mydiaryapp.Enums.FragmentType;
+import com.example.mydiaryapp.Models.ImageFragment;
+import com.example.mydiaryapp.Models.MediaFileFragment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,15 +13,15 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FragmentViewModel {
-    private Integer queuePosition;
-
-    private Long fragmentId;
+    private Long id;
 
     private FragmentType fragmentType;
 
     private String textFragment;
 
-    private byte[] imageFragment;
+    private String base64FileData;
 
-    private byte[] mediaFileFragment;
+    private ImageFragment imageFragment;
+
+    private MediaFileFragment mediaFileFragment;
 }

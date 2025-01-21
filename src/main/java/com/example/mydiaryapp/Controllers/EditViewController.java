@@ -5,10 +5,9 @@ import com.example.mydiaryapp.Helpers.EditViewControllerHelper;
 import com.example.mydiaryapp.Models.DiaryModel;
 import com.example.mydiaryapp.Models.FragmentModel;
 import com.example.mydiaryapp.Models.TagModel;
-import com.example.mydiaryapp.Services.DiaryService;
-import com.example.mydiaryapp.Services.FragmentService;
-import com.example.mydiaryapp.Services.MyAppUserService;
-import com.example.mydiaryapp.Services.TagService;
+import com.example.mydiaryapp.Models.ViewModels.DiaryViewModel;
+import com.example.mydiaryapp.Models.ViewModels.FragmentViewModel;
+import com.example.mydiaryapp.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -30,16 +28,21 @@ public class EditViewController {
 
     @Autowired
     public EditViewController(DiaryService diaryService, FragmentService fragmentService,
-                              MyAppUserService myAppUserService, TagService tagService) {
-        this.helper = new EditViewControllerHelper(diaryService, fragmentService, myAppUserService, tagService);
+                              MyAppUserService myAppUserService, TagService tagService,
+                              ImageFragmentService imageFragmentService,
+                              MediaFileFragmentService mediaFileFragmentService) {
+        this.helper = new EditViewControllerHelper(diaryService, fragmentService, myAppUserService, tagService,
+                imageFragmentService, mediaFileFragmentService);
     }
 
     @GetMapping("/new-diary")
     public String viewEditNotExistingDiary(
             @RequestParam(value = "tab", defaultValue = "edit") String tab,
             Model model) {
+        DiaryViewModel diaryViewModel = new DiaryViewModel();
+
         model.addAttribute("activeTab", tab);
-        model.addAttribute("title", "");
+        model.addAttribute("diaryViewModel", diaryViewModel);
         model.addAttribute("fragmentModels", null);
 
         return "user-diaries/edit-view";
@@ -53,26 +56,25 @@ public class EditViewController {
             @RequestParam(value = "addtag", defaultValue = "") String tagContent,
             @PathVariable(value = "diaryId") Long diaryId,
             Model model) {
-        Optional<DiaryModel> diaryModel = helper.diaryService.findById(diaryId);
+        Optional<DiaryModel> diaryModelOptional = helper.diaryService.findById(diaryId);
 
-        if (diaryModel.isEmpty()) {
+        if (diaryModelOptional.isEmpty()) {
             return "redirect:/404";
         }
 
-        List<FragmentModel> fragmentModels = helper.fragmentService.findAllByDiaryId(diaryId);
+        DiaryModel diaryModel = diaryModelOptional.get();
+
+        List<FragmentViewModel> fragmentModels = helper.getFragmentViewModels(diaryId);
         List<TagModel> tagModels = helper.tagService.getAllTagsByDiaryId(diaryId);
 
         if (tab.equals("edit")) {
             if (helper.fragmentService.existsById(removeFragmentId)) {
                 helper.fragmentService.delete(removeFragmentId);
 
-                fragmentModels = helper.fragmentService.findAllByDiaryId(diaryId);
+                fragmentModels = helper.getFragmentViewModels(diaryId);
 
-                diaryModel.get().setLastEditDate(LocalDateTime.now());
-                helper.diaryService.save(diaryModel.get());
-
-                diaryModel.get().setLastEditDate(LocalDateTime.now());
-                helper.diaryService.save(diaryModel.get());
+                diaryModel.setLastEditDate(LocalDateTime.now());
+                helper.diaryService.save(diaryModel);
             }
 
             if (helper.tagService.existsById(removeTagId)) {
@@ -80,25 +82,30 @@ public class EditViewController {
 
                 tagModels = helper.tagService.getAllTagsByDiaryId(diaryId);
 
-                diaryModel.get().setLastEditDate(LocalDateTime.now());
-                helper.diaryService.save(diaryModel.get());
+                diaryModel.setLastEditDate(LocalDateTime.now());
+                helper.diaryService.save(diaryModel);
             }
 
             tagContent = tagContent.toLowerCase();
-            if (helper.addTagToDiary(diaryModel.get(), tagContent, tagModels)) {
+            if (helper.addTagToDiary(diaryModel, tagContent, tagModels)) {
                 tagModels = helper.tagService.getAllTagsByDiaryId(diaryId);
 
-                diaryModel.get().setLastEditDate(LocalDateTime.now());
-                helper.diaryService.save(diaryModel.get());
+                diaryModel.setLastEditDate(LocalDateTime.now());
+                helper.diaryService.save(diaryModel);
             }
-        } else if (tab.equals("view")) {
-
         }
+
+        DiaryViewModel diaryViewModel = new DiaryViewModel(
+                diaryId,
+                diaryModel.getTitle(),
+                "",
+                "",
+                diaryModel.getLastEditDate(),
+                diaryModel.getCreationDate());
 
         model.addAttribute("FragmentType", FragmentType.class);
         model.addAttribute("activeTab", tab);
-        model.addAttribute("diaryId", diaryId);
-        model.addAttribute("title", diaryModel.get().getTitle());
+        model.addAttribute("diaryViewModel", diaryViewModel);
         model.addAttribute("fragmentModels", fragmentModels);
         model.addAttribute("tagModels", tagModels);
 

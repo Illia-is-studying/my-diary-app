@@ -22,6 +22,18 @@ public class DiaryService {
         return diaryRepository.findDiariesByMyAppUsersId(userId);
     }
 
+    public List<DiaryModel> findByUserIdOrderByLastEditDateDesc(Long userId) {
+        return diaryRepository.findByMyAppUsersIdOrderByLastEditDateDesc(userId);
+    }
+
+    public List<DiaryModel> findByUserIdOrderByLastEditDateAsc(Long userId) {
+        return diaryRepository.findByMyAppUsersIdOrderByLastEditDateAsc(userId);
+    }
+
+    public List<DiaryModel> findByUserIdOrderByTitleAsc(Long userId) {
+        return diaryRepository.findByMyAppUsersIdOrderByTitleAsc(userId);
+    }
+
     public Optional<DiaryModel> findById(Long id) {
        return this.diaryRepository.findById(id);
     }

@@ -24,13 +24,13 @@ public class FragmentModel {
     @Column(columnDefinition = "TEXT")
     private String textFragment;
 
-    @Basic
-    @Column(name = "image", columnDefinition = "LONGBLOB")
-    private byte[] imageFragment;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id", referencedColumnName = "id")
+    private ImageFragment imageFragment;
 
-    @Basic
-    @Column(name = "media_file", columnDefinition = "LONGBLOB")
-    private byte[] mediaFileFragment;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "media_id", referencedColumnName = "id")
+    private MediaFileFragment mediaFileFragment;
 
     @Enumerated(EnumType.ORDINAL)
     private FragmentType fragmentType;
