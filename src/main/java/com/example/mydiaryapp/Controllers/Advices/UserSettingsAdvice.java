@@ -26,16 +26,16 @@ public class UserSettingsAdvice {
 
     @ModelAttribute("userSettings")
     public UserSettingsModel addUserSettingsToModel(HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId != null) {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            List<MyAppUser> myAppUsers = myAppUserService.getCurrentUserInListByAuthentication(authentication);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-            return userSettingsService.getUserSettings(myAppUsers.get(0));
+        if (authentication == null
+                || !authentication.isAuthenticated()
+                || "anonymousUser".equals(authentication.getPrincipal())) {
+            return new UserSettingsModel(0L, null, 3);
         }
 
-        UserSettingsModel defaultSettings = new UserSettingsModel();
-        defaultSettings.setCartStorageDays(3);
-        return defaultSettings;
+        List<MyAppUser> myAppUsers = myAppUserService.getCurrentUserInListByAuthentication(authentication);
+
+        return userSettingsService.getUserSettings(myAppUsers.get(0));
     }
 }

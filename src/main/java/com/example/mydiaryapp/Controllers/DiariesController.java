@@ -42,11 +42,14 @@ public class DiariesController {
 
     @GetMapping("/diaries")
     public String diaries(HttpSession httpSession, Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<MyAppUser> myAppUsers = myAppUserService.getCurrentUserInListByAuthentication(authentication);
-        Long userId = myAppUsers.get(0).getId();
+        Long userId = (Long) httpSession.getAttribute("userId");
 
-        httpSession.setAttribute("userId", userId);
+        if (userId == null) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            List<MyAppUser> myAppUsers = myAppUserService.getCurrentUserInListByAuthentication(authentication);
+            userId = myAppUsers.get(0).getId();
+            httpSession.setAttribute("userId", userId);
+        }
 
         List<DiaryModel> diaryModels = null;
 
