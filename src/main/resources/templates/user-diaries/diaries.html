@@ -26,7 +26,7 @@
                                 <h5 class="card-title fw-bold" th:text="${diary.getTitle()}"></h5>
                                 <p class="card-text" th:text="${diary.getShortDescription()}"></p>
                                 <p class="card-text text-muted small mt-auto"
-                                   th:text="${diary.getLastEditDateString()}"></p>
+                                   th:text="'Edited '+${diary.getLastEditDateString()}"></p>
                             </div>
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
@@ -96,6 +96,9 @@
                 <div class="mb-3">
                     <a href="/edit-view/new-diary" class="btn btn-outline-primary">
                         <span>Add New</span>&ensp;<div th:replace="~{fragments/svg-icons/plus-file-svg}"></div>
+                    </a>
+                    <a href="/diaries-cart" class="btn btn-outline-danger ms-2">
+                        <span>Cart</span>&ensp;<div th:replace="~{fragments/svg-icons/recycle-svg}"></div>
                     </a>
                 </div>
                 <form action="diaries/search" method="post">

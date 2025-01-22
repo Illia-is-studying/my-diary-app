@@ -46,6 +46,8 @@ public class DiariesController {
         List<MyAppUser> myAppUsers = myAppUserService.getCurrentUserInListByAuthentication(authentication);
         Long userId = myAppUsers.get(0).getId();
 
+        httpSession.setAttribute("userId", userId);
+
         List<DiaryModel> diaryModels = null;
 
         DiarySortingViewModel diarySortingViewModel =
