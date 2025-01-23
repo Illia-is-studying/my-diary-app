@@ -11,6 +11,4 @@ public interface IDiaryRepository extends JpaRepository<DiaryModel, Long> {
     List<DiaryModel> findByMyAppUsersIdOrderByLastEditDateAsc(Long userId);
 
     List<DiaryModel> findByMyAppUsersIdOrderByTitleAsc(Long userId);
-
-    List<DiaryModel> findDiariesByMyAppUsersId(Long userId);
 }

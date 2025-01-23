@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FragmentService {
@@ -41,12 +42,12 @@ public class FragmentService {
                 .stream().map(DiaryFragmentModel::getFragment).toList();
     }
 
-    public void delete(Long id) {
-        fragmentRepository.deleteById(id);
+    public Optional<FragmentModel> findById(Long id) {
+        return  fragmentRepository.findById(id);
     }
 
-    public void deleteAll(List<FragmentModel> fragmentModels) {
-        fragmentRepository.deleteAll(fragmentModels);
+    public void delete(Long id) {
+        fragmentRepository.deleteById(id);
     }
 
     public boolean existsById(Long id) {

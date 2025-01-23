@@ -1,10 +1,8 @@
 package com.example.mydiaryapp.Controllers;
 
-import com.example.mydiaryapp.Enums.FragmentType;
 import com.example.mydiaryapp.Helpers.AuthenticationHelper;
 import com.example.mydiaryapp.Helpers.DateTimeHelper;
 import com.example.mydiaryapp.Models.DiaryModel;
-import com.example.mydiaryapp.Models.FragmentModel;
 import com.example.mydiaryapp.Models.PendingDeletionModel;
 import com.example.mydiaryapp.Models.ViewModels.DiaryViewModel;
 import com.example.mydiaryapp.Models.ViewModels.PendingDeletionViewModel;
@@ -18,9 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 

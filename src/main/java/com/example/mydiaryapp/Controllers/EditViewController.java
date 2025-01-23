@@ -127,8 +127,7 @@ public class EditViewController {
         }
 
         if (tagAction.equals("addtag")) {
-            if (helper.addTagToDiary(optionalDiaryModel.get(), tagContent)) {
-            }
+            helper.addTagToDiary(optionalDiaryModel.get(), tagContent);
         } else if (tagAction.equals("remove")) {
             try {
                 Long tagNumberId = Long.parseLong(tagId);

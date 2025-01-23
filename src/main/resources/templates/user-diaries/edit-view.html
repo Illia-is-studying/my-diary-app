@@ -205,7 +205,7 @@
                                     <div th:each="fragmentModel : ${fragmentModels}">
                                         <div th:if="${fragmentModel.getFragmentType() == FragmentType.TEXT_FRAGMENT}"
                                              class="mb-5">
-                                        <textarea disabled class="fs-5 form-control autoResize"
+                                        <textarea disabled class="fs-5 form-control autoResize bg-white"
                                                   th:text="${fragmentModel.getTextFragment()}">
                                         </textarea>
                                         </div>
@@ -214,10 +214,10 @@
                                         && fragmentModel.getImageFragment() != null}"
                                              class="mb-5">
                                             <div class="mb-1">
-                                                <button class="btn btn-success">
+                                                <a th:href="'/download?fragmentId='+${fragmentModel.getId()}" class="btn btn-success">
                                                     <span th:replace="~{fragments/svg-icons/download-svg}"></span>
                                                     <span>&ensp;Download</span>
-                                                </button>
+                                                </a>
                                             </div>
                                             <img style="max-height: 500px" class="border border-success img-thumbnail"
                                                  th:src="'data:image/'+${fragmentModel.getImageFragment().getFileType()}+';base64,'
@@ -228,10 +228,10 @@
                                         <div th:if="${fragmentModel.getFragmentType() == FragmentType.MEDIA_FILE
                                         && fragmentModel.getMediaFileFragment() != null}"
                                              class="mb-5 d-flex align-items-center">
-                                            <button class="btn btn-success">
+                                            <a th:href="'/download?fragmentId='+${fragmentModel.getId()}" class="btn btn-success">
                                                 <span th:replace="~{fragments/svg-icons/download-svg}"></span>
                                                 <span>&ensp;Download</span>
-                                            </button>
+                                            </a>
                                             <div class="ms-2 text-success">
                                                 <span th:replace="~{fragments/svg-icons/media-file-svg}"></span>
                                                 <span th:text="${fragmentModel.getMediaFileFragment().getFileName()}"></span>

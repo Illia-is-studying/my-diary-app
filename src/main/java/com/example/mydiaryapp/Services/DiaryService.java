@@ -1,7 +1,6 @@
 package com.example.mydiaryapp.Services;
 
 import com.example.mydiaryapp.Models.DiaryModel;
-import com.example.mydiaryapp.Models.MyAppUser;
 import com.example.mydiaryapp.Repo.IDiaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +15,6 @@ public class DiaryService {
     @Autowired
     public DiaryService(IDiaryRepository diaryRepository) {
         this.diaryRepository = diaryRepository;
-    }
-
-    public List<DiaryModel> findAllByMyAppUserId(Long userId) {
-        return diaryRepository.findDiariesByMyAppUsersId(userId);
     }
 
     public List<DiaryModel> findByUserIdOrderByLastEditDateDesc(Long userId) {

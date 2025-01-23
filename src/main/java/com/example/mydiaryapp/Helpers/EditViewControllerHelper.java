@@ -140,6 +140,7 @@ public class EditViewControllerHelper {
 
     public boolean addTagToDiary(DiaryModel diaryModel, String tagContent) {
         if (!tagContent.isEmpty()) {
+            tagContent = tagContent.replace(" ", "_");
             TagModel tagModel = tagService.findByContent(tagContent);
 
             if (tagModel != null) {

@@ -29,15 +29,16 @@ public class UserSettingsAdvice {
     public UserSettingsModel addUserSettingsToModel(HttpSession session) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication == null
-                || !authentication.isAuthenticated()
-                || "anonymousUser".equals(authentication.getPrincipal())) {
-            return new UserSettingsModel(0L, null, 3);
+        if (authentication != null && !authentication.isAuthenticated()
+                && !"anonymousUser".equals(authentication.getPrincipal())) {
+            List<MyAppUser> myAppUsers = AuthenticationHelper
+                    .getCurrentUserInListByAuthentication(authentication, myAppUserService);
+
+            if(!myAppUsers.isEmpty()) {
+                return userSettingsService.getUserSettings(myAppUsers.get(0));
+            }
         }
-
-        List<MyAppUser> myAppUsers = AuthenticationHelper
-                .getCurrentUserInListByAuthentication(authentication, myAppUserService);
-
-        return userSettingsService.getUserSettings(myAppUsers.get(0));
+        
+        return new UserSettingsModel(0L, null, 3);
     }
 }

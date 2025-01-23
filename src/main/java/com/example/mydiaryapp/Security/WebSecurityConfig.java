@@ -61,7 +61,8 @@ public class WebSecurityConfig {
                     form.defaultSuccessUrl("/diaries");
                 })
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/", "/login", "/register", "/css/**", "/js/**").permitAll();
+                    registry.requestMatchers("/", "/login", "/register", "/css/**", "/js/**", "/assets/*")
+                            .permitAll();
                     registry.anyRequest().authenticated();
                 })
                 .logout(logout -> logout

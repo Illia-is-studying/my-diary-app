@@ -13,6 +13,4 @@ public interface ITagRepository extends JpaRepository<TagModel, Long> {
     TagModel findByContentAndDiariesId(String content, Long diaryId);
 
     boolean existsById(Long id);
-
-    //void deleteAllFromDiaries(Long diaryId, List<TagModel> tags);
 }

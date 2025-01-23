@@ -8,7 +8,9 @@
                 </div>
                 <form action="/settings/save" method="post">
                     <div class="modal-body">
-                        <input type="hidden" th:name="userId" th:value="${userSettings.getMyAppUser().getId()}"/>
+                        <input type="hidden" th:name="userId"
+                               th:value="${userSettings.getMyAppUser() == null ? ''
+                               : userSettings.getMyAppUser().getId()}"/>
                         <div class="mb-3">
                             <label for="cartStorageDays" class="form-label">Number of days before deleting the
                                 diary</label>

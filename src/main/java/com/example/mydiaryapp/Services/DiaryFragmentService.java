@@ -1,7 +1,6 @@
 package com.example.mydiaryapp.Services;
 
 import com.example.mydiaryapp.Models.DiaryFragmentModel;
-import com.example.mydiaryapp.Models.FragmentModel;
 import com.example.mydiaryapp.Repo.IDiaryFragmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

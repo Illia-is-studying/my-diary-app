@@ -58,10 +58,6 @@ public class TagService {
         }
     }
 
-    public Optional<TagModel> findById(Long id) {
-        return this.tagRepository.findById(id);
-    }
-
     public boolean existsById(Long id) {
         return this.tagRepository.existsById(id);
     }
