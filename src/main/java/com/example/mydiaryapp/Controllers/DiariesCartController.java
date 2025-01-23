@@ -49,9 +49,8 @@ public class DiariesCartController {
         for (PendingDeletionModel pendingDeletionModel : diaryModels) {
             DiaryModel diaryModel= pendingDeletionModel.getDiary();
 
-            LocalDateTime now = LocalDateTime.now();
-            Duration duration = Duration.between(now, pendingDeletionModel.getDeletionDate());
-            String timeUntilDeletion = duration.toDays() + " days";
+            String timeUntilDeletion = DateTimeHelper
+                    .getTimeDifference(LocalDateTime.now(), pendingDeletionModel.getDeletionDate(), "");
 
             PendingDeletionViewModel pendingDeletionViewModel = new PendingDeletionViewModel();
             pendingDeletionViewModel.setId(pendingDeletionModel.getId());

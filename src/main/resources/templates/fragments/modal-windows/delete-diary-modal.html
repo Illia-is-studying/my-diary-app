@@ -1,0 +1,30 @@
+<div th:fragment="delete-diary-modal">
+    <div class="modal fade" id="deleteModal" tabindex="-1"
+         aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <span>Are you sure you want to add the diary titled </span>
+                    <span id="diaryTitleSpan"></span><span> to your cart?</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">Cancel
+                    </button>
+                    <form method="post" action="/edit-view/save">
+                        <input id="titleInputModal" name="titleInput" type="hidden">
+                        <input id="diaryIdModal" name="diaryId" type="hidden">
+                        <input id="fragmentAction" name="fragment-action" type="hidden" value="delete">
+                        <button type="submit" class="btn btn-danger">Confirm
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

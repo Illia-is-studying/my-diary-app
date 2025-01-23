@@ -25,12 +25,12 @@ public class TagService {
         return this.tagRepository.findAllByDiariesId(diaryId);
     }
 
-    public List<TagModel> findContentStartingWith(String startingWithContent) {
-        return this.tagRepository.findByContentStartingWithIgnoreCase(startingWithContent);
-    }
-
     public TagModel findByContent(String content) {
         return this.tagRepository.findByContent(content);
+    }
+
+    public TagModel findByContentAndDiaryId(String content, Long diaryId) {
+        return this.tagRepository.findByContentAndDiariesId(content, diaryId);
     }
 
     public TagModel save(TagModel tagModel, Long diaryId) {

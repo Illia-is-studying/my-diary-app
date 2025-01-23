@@ -43,7 +43,7 @@
                                             th:data-diary-id="${diary.getId()}"
                                             th:data-diary-title="${diary.getTitle()}"
                                             onclick="setModalWindowData(this)">
-                                    <span th:replace="~{fragments/svg-icons/trash-svg}"></span>
+                                        <span th:replace="~{fragments/svg-icons/trash-svg}"></span>
                                     </button>
                                 </li>
                             </ul>
@@ -51,34 +51,7 @@
                                  th:text="${diary.getCountTimeAgo()}"></div>
                         </div>
                     </div>
-                    <div class="modal fade" id="deleteModal" tabindex="-1"
-                         aria-labelledby="deleteModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <span>Are you sure you want to add the diary titled </span>
-                                    <span id="diaryTitleSpan"></span><span> to your cart?</span>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Cancel
-                                    </button>
-                                    <form method="post" action="/edit-view/save">
-                                        <input id="titleInput" name="titleInput" type="hidden">
-                                        <input id="diaryId" name="diaryId" type="hidden">
-                                        <button name="buttonSubmit" type="submit" th:value="delete"
-                                                class="btn btn-danger">Confirm
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <div th:replace="~{fragments/modal-windows/delete-diary-modal}"></div>
                 </div>
                 <div class="row" th:if="${diaryViewModels == null || diaryViewModels.size() < 1}">
                     <div class="col-md-4">
@@ -92,7 +65,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-4 ms-auto">
+            <div style="margin-top: 100px" class="col-4 ms-auto me-4 p-3 fixed-top border rounded note-card">
                 <div class="mb-3">
                     <a href="/edit-view/new-diary" class="btn btn-outline-primary">
                         <span>Add New</span>&ensp;<div th:replace="~{fragments/svg-icons/plus-file-svg}"></div>
@@ -121,7 +94,7 @@
                         <span class="input-group-text">From</span>
                         <input type="datetime-local" name="from-date" class="form-control" placeholder="From date"
                                aria-label="from date" aria-describedby="from-date-addon"
-                        th:value="${diarySortingViewModel.getFromDate() == null ? '' : diarySortingViewModel.getFromDate()}">
+                               th:value="${diarySortingViewModel.getFromDate() == null ? '' : diarySortingViewModel.getFromDate()}">
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text">To</span>
@@ -152,20 +125,7 @@
     </div>
 </main>
 
-<script type="application/javascript">
-    function setModalWindowData(buttonElement) {
-        const diaryIdValue = buttonElement.getAttribute('data-diary-id');
-        const diaryTitleValue = buttonElement.getAttribute('data-diary-title');
-
-        const diaryIdInput = document.getElementById("diaryId");
-        const diaryTitleSpan = document.getElementById("diaryTitleSpan");
-        const diaryTitleInput = document.getElementById("titleInput");
-
-        diaryIdInput.value = diaryIdValue;
-        diaryTitleSpan.innerHTML = `<b>${diaryTitleValue}</b>`;
-        diaryTitleInput.value = diaryTitleValue;
-    }
-</script>
+<script src="/js/script.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>

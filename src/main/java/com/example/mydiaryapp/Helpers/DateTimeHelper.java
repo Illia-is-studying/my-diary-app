@@ -4,27 +4,26 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class DateTimeHelper {
-    public static String getTimeDifference(LocalDateTime lastChange) {
-        LocalDateTime now = LocalDateTime.now();
-        Duration duration = Duration.between(lastChange, now);
+    public static String getTimeDifference(LocalDateTime startInclusive, LocalDateTime endInclusive, String word) {
+        Duration duration = Duration.between(startInclusive, endInclusive);
 
         long seconds = duration.getSeconds();
         if (seconds < 60) {
-            return seconds + " sec ago";
+            return seconds + " sec " + word;
         }
 
         long minutes = duration.toMinutes();
         if (minutes < 60) {
-            return minutes + " min ago";
+            return minutes + " min " + word;
         }
 
         long hours = duration.toHours();
         if (hours < 24) {
-            return hours + (hours == 1 ? " hour" : " hours") + " ago";
+            return hours + (hours == 1 ? " hour" : " hours") + word;
         }
 
         long days = duration.toDays();
-        return days + (days == 1 ? " day" : " days") + " ago";
+        return days + (days == 1 ? " day" : " days") + word;
     }
 
     public static boolean isDateBetween(LocalDateTime dateToCheck, LocalDateTime startDate, LocalDateTime endDate) {

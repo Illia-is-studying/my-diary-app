@@ -12,13 +12,12 @@
     <div class="container py-5 mt-5">
         <div class="row">
             <div class="col-8 mx-auto border rounded">
-                <div th:if="${pendingDeletionViewModels == null || pendingDeletionViewModels.isEmpty()}">
-                    <div class="mb-3">
-                        <h2 class="text-center">The Cart Is Empty</h2>
-                    </div>
+                <div th:if="${pendingDeletionViewModels == null || pendingDeletionViewModels.isEmpty()}"
+                     class="mb-3 mt-3">
+                    <h2 class="text-center">The Cart Is Empty</h2>
                 </div>
                 <div th:if="${pendingDeletionViewModels != null && !pendingDeletionViewModels.isEmpty()}">
-                    <div class="mb-3">
+                    <div class="mb-3 mt-3">
                         <h2 class="text-center">Pending Deletion</h2>
                     </div>
                     <table class="table table-striped border border-secondary">

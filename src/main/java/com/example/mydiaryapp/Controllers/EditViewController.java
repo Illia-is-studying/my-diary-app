@@ -4,12 +4,10 @@ import com.example.mydiaryapp.Enums.FragmentType;
 import com.example.mydiaryapp.Helpers.EditViewControllerHelper;
 import com.example.mydiaryapp.Models.DiaryModel;
 import com.example.mydiaryapp.Models.FragmentModel;
-import com.example.mydiaryapp.Models.PendingDeletionModel;
 import com.example.mydiaryapp.Models.TagModel;
 import com.example.mydiaryapp.Models.ViewModels.DiaryViewModel;
 import com.example.mydiaryapp.Models.ViewModels.FragmentViewModel;
 import com.example.mydiaryapp.Services.*;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -77,23 +75,6 @@ public class EditViewController {
                 diaryModel.setLastEditDate(LocalDateTime.now());
                 helper.diaryService.save(diaryModel);
             }
-
-            if (helper.tagService.existsById(removeTagId)) {
-                helper.tagService.deleteFromDiaries(diaryId, removeTagId);
-
-                tagModels = helper.tagService.getAllTagsByDiaryId(diaryId);
-
-                diaryModel.setLastEditDate(LocalDateTime.now());
-                helper.diaryService.save(diaryModel);
-            }
-
-            tagContent = tagContent.toLowerCase();
-            if (helper.addTagToDiary(diaryModel, tagContent, tagModels)) {
-                tagModels = helper.tagService.getAllTagsByDiaryId(diaryId);
-
-                diaryModel.setLastEditDate(LocalDateTime.now());
-                helper.diaryService.save(diaryModel);
-            }
         }
 
         DiaryViewModel diaryViewModel = new DiaryViewModel(
@@ -117,7 +98,10 @@ public class EditViewController {
     public String saveEditDiary(
             @RequestParam("titleInput") String title,
             @RequestParam("diaryId") Long diaryId,
-            @RequestParam("buttonSubmit") String buttonValue,
+            @RequestParam("fragment-action") String fragmentAction,
+            @RequestParam(name = "tag-action", required = false) String tagAction,
+            @RequestParam(name = "tag-content", required = false) String tagContent,
+            @RequestParam(name = "tag-id", required = false) String tagId,
             @RequestParam Map<String, String> textInputs,
             @RequestParam Map<String, MultipartFile> fileInputs,
             Model model) {
@@ -131,17 +115,30 @@ public class EditViewController {
             List<FragmentModel> fragmentModels = helper.getFragmentModels();
             helper.fragmentService.saveAll(fragmentModels);
 
-            if (buttonValue.equals("delete")) {
+            if (fragmentAction.equals("delete")) {
                 helper.savePendingDeletion(authentication, optionalDiaryModel.get());
-
-                //helper.fragmentService.deleteAll(fragmentModels);
 
                 return "redirect:/diaries";
             }
         }
 
-        if (!helper.createEmptyFragmentBy(buttonValue, optionalDiaryModel.get())) {
+        if (!helper.createEmptyFragmentOrSaveBy(fragmentAction, optionalDiaryModel.get())) {
             return "redirect:/404";
+        }
+
+        if (tagAction.equals("addtag")) {
+            if (helper.addTagToDiary(optionalDiaryModel.get(), tagContent)) {
+            }
+        } else if (tagAction.equals("remove")) {
+            try {
+                Long tagNumberId = Long.parseLong(tagId);
+
+                if (helper.tagService.existsById(tagNumberId)) {
+                    helper.tagService.deleteFromDiaries(diaryId, tagNumberId);
+                }
+            } catch (NumberFormatException nfe) {
+                nfe.printStackTrace();
+            }
         }
 
         optionalDiaryModel.get().setLastEditDate(LocalDateTime.now());

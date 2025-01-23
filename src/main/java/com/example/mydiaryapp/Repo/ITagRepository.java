@@ -6,11 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ITagRepository extends JpaRepository<TagModel, Long> {
-    List<TagModel> findByContentStartingWithIgnoreCase(String contentStartingWith);
-
     List<TagModel> findAllByDiariesId(Long id);
 
     TagModel findByContent(String content);
+
+    TagModel findByContentAndDiariesId(String content, Long diaryId);
 
     boolean existsById(Long id);
 

@@ -42,7 +42,7 @@ public class DiaryService {
         return this.diaryRepository.save(diaryModel).getId();
     }
 
-    public void delete(DiaryModel diaryModel) {
-        this.diaryRepository.delete(diaryModel);
+    public void deleteById(Long id) {
+        this.diaryRepository.deleteById(id);
     }
 }

@@ -120,16 +120,16 @@ public class EditViewControllerHelper {
         });
     }
 
-    public boolean createEmptyFragmentBy(String buttonValue, DiaryModel diaryModel) {
+    public boolean createEmptyFragmentOrSaveBy(String fragmentAction, DiaryModel diaryModel) {
         FragmentModel newFragmentModel = new FragmentModel();
 
-        if (buttonValue.equals("newtext")) {
+        if (fragmentAction.equals("newtext")) {
             newFragmentModel.setFragmentType(FragmentType.TEXT_FRAGMENT);
-        } else if (buttonValue.equals("newimage")) {
+        } else if (fragmentAction.equals("newimage")) {
             newFragmentModel.setFragmentType(FragmentType.IMAGE);
-        } else if (buttonValue.equals("newmedia")) {
+        } else if (fragmentAction.equals("newmedia")) {
             newFragmentModel.setFragmentType(FragmentType.MEDIA_FILE);
-        } else if (!buttonValue.equals("save")) {
+        } else if (!fragmentAction.equals("save")) {
             return false;
         }
 
@@ -138,21 +138,19 @@ public class EditViewControllerHelper {
         return true;
     }
 
-    public boolean addTagToDiary(DiaryModel diaryModel, String tagContent, List<TagModel> tagModels) {
+    public boolean addTagToDiary(DiaryModel diaryModel, String tagContent) {
         if (!tagContent.isEmpty()) {
             TagModel tagModel = tagService.findByContent(tagContent);
 
-            if (tagModel == null) {
-                tagModel = new TagModel();
-                tagModel.setContent(tagContent);
-            } else {
-                List<TagModel> similarTags = tagModels.stream()
-                        .filter(tm -> tm.getContent().equalsIgnoreCase(tagContent))
-                        .toList();
+            if (tagModel != null) {
+                TagModel checkTagModel = tagService.findByContentAndDiaryId(tagContent, diaryModel.getId());
 
-                if (!similarTags.isEmpty()) {
+                if (checkTagModel != null) {
                     return false;
                 }
+            } else {
+                tagModel = new TagModel();
+                tagModel.setContent(tagContent);
             }
 
             tagService.save(tagModel, diaryModel.getId());
