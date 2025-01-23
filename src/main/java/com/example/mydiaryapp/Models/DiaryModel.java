@@ -42,4 +42,7 @@ public class DiaryModel {
 
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
     private List<DiaryFragmentModel> diaryFragmentModels = new ArrayList<>();
+
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
+    private List<PendingDeletionModel> pendingDeletionModels = new ArrayList<>();
 }

@@ -25,6 +25,9 @@ public class MyAppUser implements UserDetails {
     @ManyToMany(mappedBy = "myAppUsers")
     private List<DiaryModel> diaries = new ArrayList<>();
 
+    @OneToMany(mappedBy = "myAppUser", cascade = CascadeType.ALL)
+    private List<PendingDeletionModel> pendingDeletions = new ArrayList<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.emptyList();

@@ -53,16 +53,4 @@ public class MyAppUserService implements UserDetailsService {
     public boolean existsByEmail(String email) {
         return myAppUserRepository.existsByEmail(email);
     }
-
-    public List<MyAppUser> getCurrentUserInListByAuthentication(Authentication authentication) {
-        Object principal = authentication.getPrincipal();
-        UserDetails userDetails = (UserDetails) principal;
-        String currentUsername = userDetails.getUsername();
-        Optional<MyAppUser> currentUser = findByUsername(currentUsername);
-
-        List<MyAppUser> myAppUsers = new ArrayList<>();
-        currentUser.ifPresent(myAppUsers::add);
-
-        return myAppUsers;
-    }
 }

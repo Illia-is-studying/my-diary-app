@@ -1,5 +1,6 @@
 package com.example.mydiaryapp.Controllers.Advices;
 
+import com.example.mydiaryapp.Helpers.AuthenticationHelper;
 import com.example.mydiaryapp.Models.MyAppUser;
 import com.example.mydiaryapp.Models.UserSettingsModel;
 import com.example.mydiaryapp.Services.MyAppUserService;
@@ -34,7 +35,8 @@ public class UserSettingsAdvice {
             return new UserSettingsModel(0L, null, 3);
         }
 
-        List<MyAppUser> myAppUsers = myAppUserService.getCurrentUserInListByAuthentication(authentication);
+        List<MyAppUser> myAppUsers = AuthenticationHelper
+                .getCurrentUserInListByAuthentication(authentication, myAppUserService);
 
         return userSettingsService.getUserSettings(myAppUsers.get(0));
     }

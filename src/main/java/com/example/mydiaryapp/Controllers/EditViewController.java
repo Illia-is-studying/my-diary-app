@@ -4,10 +4,12 @@ import com.example.mydiaryapp.Enums.FragmentType;
 import com.example.mydiaryapp.Helpers.EditViewControllerHelper;
 import com.example.mydiaryapp.Models.DiaryModel;
 import com.example.mydiaryapp.Models.FragmentModel;
+import com.example.mydiaryapp.Models.PendingDeletionModel;
 import com.example.mydiaryapp.Models.TagModel;
 import com.example.mydiaryapp.Models.ViewModels.DiaryViewModel;
 import com.example.mydiaryapp.Models.ViewModels.FragmentViewModel;
 import com.example.mydiaryapp.Services.*;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,10 +31,9 @@ public class EditViewController {
     @Autowired
     public EditViewController(DiaryService diaryService, FragmentService fragmentService,
                               MyAppUserService myAppUserService, TagService tagService,
-                              ImageFragmentService imageFragmentService,
-                              MediaFileFragmentService mediaFileFragmentService) {
+                              PendingDeletionService pendingDeletionService, UserSettingsService userSettingsService) {
         this.helper = new EditViewControllerHelper(diaryService, fragmentService, myAppUserService, tagService,
-                imageFragmentService, mediaFileFragmentService);
+                pendingDeletionService, userSettingsService);
     }
 
     @GetMapping("/new-diary")
@@ -121,23 +122,22 @@ public class EditViewController {
             @RequestParam Map<String, MultipartFile> fileInputs,
             Model model) {
         Optional<DiaryModel> optionalDiaryModel = helper.diaryService.findById(diaryId);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (optionalDiaryModel.isEmpty()) {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
             optionalDiaryModel = helper.createDiary(authentication, title);
         } else {
             helper.aggregateReceivedInputsInFragments(textInputs, fileInputs);
             List<FragmentModel> fragmentModels = helper.getFragmentModels();
+            helper.fragmentService.saveAll(fragmentModels);
 
             if (buttonValue.equals("delete")) {
-                helper.diaryService.delete(optionalDiaryModel.get());
-                helper.fragmentService.deleteAll(fragmentModels);
+                helper.savePendingDeletion(authentication, optionalDiaryModel.get());
+
+                //helper.fragmentService.deleteAll(fragmentModels);
 
                 return "redirect:/diaries";
             }
-
-            helper.fragmentService.saveAll(fragmentModels);
         }
 
         if (!helper.createEmptyFragmentBy(buttonValue, optionalDiaryModel.get())) {

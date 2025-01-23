@@ -8,10 +8,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(
-        name = "pending_deletion",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"my_app_user_id", "diary_id"}))
+@Entity(name = "pending_deletion")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -21,11 +18,13 @@ public class PendingDeletionModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "my_app_user_id", nullable = false)
-    private Long myAppUserId;
+    @ManyToOne
+    @JoinColumn(name = "my_app_user_id", nullable = false)
+    private MyAppUser myAppUser;
 
-    @Column(name = "diary_id", nullable = false)
-    private Long diaryId;
+    @ManyToOne
+    @JoinColumn(name = "diary_id", nullable = false)
+    private DiaryModel diary;
 
     @Column(nullable = false)
     private LocalDateTime deletionDate;

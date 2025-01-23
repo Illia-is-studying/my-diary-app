@@ -2,6 +2,7 @@ package com.example.mydiaryapp.Controllers;
 
 import com.example.mydiaryapp.Enums.FragmentType;
 import com.example.mydiaryapp.Enums.SortingType;
+import com.example.mydiaryapp.Helpers.AuthenticationHelper;
 import com.example.mydiaryapp.Helpers.DateTimeHelper;
 import com.example.mydiaryapp.Models.DiaryModel;
 import com.example.mydiaryapp.Models.FragmentModel;
@@ -42,14 +43,7 @@ public class DiariesController {
 
     @GetMapping("/diaries")
     public String diaries(HttpSession httpSession, Model model) {
-        Long userId = (Long) httpSession.getAttribute("userId");
-
-        if (userId == null) {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            List<MyAppUser> myAppUsers = myAppUserService.getCurrentUserInListByAuthentication(authentication);
-            userId = myAppUsers.get(0).getId();
-            httpSession.setAttribute("userId", userId);
-        }
+        Long userId = AuthenticationHelper.getCurrentUserId(httpSession, myAppUserService);
 
         List<DiaryModel> diaryModels = null;
 
@@ -75,6 +69,7 @@ public class DiariesController {
             }
 
             diaryModels = diaryModels.stream()
+                    .filter(dm -> dm.getPendingDeletionModels().isEmpty())
                     .filter(dm -> DateTimeHelper.isDateBetween(dm.getLastEditDate(),
                             diarySortingViewModel.getFromDate(),
                             diarySortingViewModel.getToDate()))

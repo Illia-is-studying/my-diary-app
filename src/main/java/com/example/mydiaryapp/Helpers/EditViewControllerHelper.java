@@ -16,25 +16,27 @@ public class EditViewControllerHelper {
     public final FragmentService fragmentService;
     public final MyAppUserService myAppUserService;
     public final TagService tagService;
-    public final ImageFragmentService imageFragmentService;
-    public final MediaFileFragmentService mediaFileFragmentService;
+    public final PendingDeletionService pendingDeletionService;
+    public final UserSettingsService userSettingsService;
 
     private final List<FragmentModel> fragmentModelsBuffer = new ArrayList<>();
 
     public EditViewControllerHelper(DiaryService diaryService, FragmentService fragmentService,
                                     MyAppUserService myAppUserService, TagService tagService,
-                                    ImageFragmentService imageFragmentService,
-                                    MediaFileFragmentService mediaFileFragmentService) {
+                                    PendingDeletionService pendingDeletionService,
+                                    UserSettingsService userSettingsService) {
         this.diaryService = diaryService;
         this.fragmentService = fragmentService;
         this.myAppUserService = myAppUserService;
         this.tagService = tagService;
-        this.imageFragmentService = imageFragmentService;
-        this.mediaFileFragmentService = mediaFileFragmentService;
+        this.pendingDeletionService = pendingDeletionService;
+        this.userSettingsService = userSettingsService;
     }
 
     public Optional<DiaryModel> createDiary(Authentication authentication, String title) {
-        List<MyAppUser> myAppUsers = myAppUserService.getCurrentUserInListByAuthentication(authentication);
+        List<MyAppUser> myAppUsers = AuthenticationHelper
+                .getCurrentUserInListByAuthentication(authentication, myAppUserService);
+        MyAppUser user = myAppUsers.get(0);
 
         DiaryModel diaryModel = new DiaryModel();
         diaryModel.setCollaboration(false);
@@ -48,6 +50,21 @@ public class EditViewControllerHelper {
         diaryModel.setId(diaryId);
 
         return Optional.of(diaryModel);
+    }
+
+    public void savePendingDeletion(Authentication authentication, DiaryModel diaryModel) {
+        List<MyAppUser> myAppUsers = AuthenticationHelper
+                .getCurrentUserInListByAuthentication(authentication, myAppUserService);
+        MyAppUser user = myAppUsers.get(0);
+
+        UserSettingsModel userSettingsModel = userSettingsService.getUserSettings(user);
+        LocalDateTime deletionDate = LocalDateTime.now().plusDays(userSettingsModel.getCartStorageDays());
+
+        PendingDeletionModel pendingDeletionModel = new PendingDeletionModel();
+        pendingDeletionModel.setDiary(diaryModel);
+        pendingDeletionModel.setMyAppUser(user);
+        pendingDeletionModel.setDeletionDate(deletionDate);
+        pendingDeletionService.save(pendingDeletionModel);
     }
 
     public void aggregateReceivedInputsInFragments(Map<String, String> textInputs,
@@ -75,7 +92,6 @@ public class EditViewControllerHelper {
                     imageFragment.setFileName(file.getOriginalFilename());
                     imageFragment.setFileType(file.getContentType());
                     imageFragment.setImageData(file.getBytes());
-                    //imageFragmentService.saveImage(imageFragment);
 
                     Long id = Long.parseLong(key.replace("image", ""));
                     fragmentModel.setId(id);
@@ -90,7 +106,6 @@ public class EditViewControllerHelper {
                     mediaFileFragment.setFileName(file.getOriginalFilename());
                     mediaFileFragment.setFileType(file.getContentType());
                     mediaFileFragment.setMediaData(file.getBytes());
-                    //mediaFileFragmentService.saveMedia(mediaFileFragment);
 
                     Long id = Long.parseLong(key.replace("media", ""));
                     fragmentModel.setId(id);

@@ -1,5 +1,6 @@
 package com.example.mydiaryapp.Controllers;
 
+import com.example.mydiaryapp.Helpers.AuthenticationHelper;
 import com.example.mydiaryapp.Models.MyAppUser;
 import com.example.mydiaryapp.Models.UserSettingsModel;
 import com.example.mydiaryapp.Services.MyAppUserService;
@@ -56,7 +57,8 @@ public class UserSettingsController {
         Long userId = (Long) session.getAttribute("userId");
         if (userId != null) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            List<MyAppUser> myAppUsers = myAppUserService.getCurrentUserInListByAuthentication(authentication);
+            List<MyAppUser> myAppUsers = AuthenticationHelper
+                    .getCurrentUserInListByAuthentication(authentication, myAppUserService);
 
             UserSettingsModel userSettings = userSettingsService.getUserSettings(myAppUsers.get(0));
             userSettingsService.resetToDefaults(userSettings);

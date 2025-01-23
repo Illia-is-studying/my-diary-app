@@ -22,6 +22,10 @@ public class DiaryViewModel {
     private LocalDateTime lastEditDate;
     private LocalDateTime creationDate;
 
+    public static DateTimeFormatter getFormatter() {
+        return formatter;
+    }
+
     public String getLastEditDateString() {
         return lastEditDate.format(formatter);
     }
