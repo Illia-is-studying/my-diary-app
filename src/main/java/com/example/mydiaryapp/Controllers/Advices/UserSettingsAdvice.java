@@ -29,7 +29,7 @@ public class UserSettingsAdvice {
     public UserSettingsModel addUserSettingsToModel(HttpSession session) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication != null && !authentication.isAuthenticated()
+        if (authentication != null && authentication.isAuthenticated()
                 && !"anonymousUser".equals(authentication.getPrincipal())) {
             List<MyAppUser> myAppUsers = AuthenticationHelper
                     .getCurrentUserInListByAuthentication(authentication, myAppUserService);
